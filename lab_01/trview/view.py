@@ -4,6 +4,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from trgeom import geom
 
 
 def disable_btns(root):
@@ -71,7 +72,10 @@ def get_dots(root):
 
 
 def draw_triangle(root):
-    trcoords = get_dots(root)
+    root.image.delete("all")
+    dots = get_dots(root)
+    solution = geom.find_solution(dots)
+    trcoords = solution[0]
 
     winx = 580
     winy = 580
@@ -100,13 +104,30 @@ def draw_triangle(root):
     offsetx = -xmin * scale + 50
     offsety = -ymin * scale + 50
 
-    result_draw = list()
+    result_draw = []
+
+    altitude_draw = [
+        trcoords[0][0] * scale + offsetx,
+        winy - (trcoords[0][1] * scale + offsety),
+        solution[1][0] * scale + offsetx,
+        winy - (solution[1][1] * scale + offsety)
+    ]
+
+    bisector_draw = [
+        trcoords[0][0] * scale + offsetx,
+        winy - (trcoords[0][1] * scale + offsety),
+        solution[2][0] * scale + offsetx,
+        winy - (solution[2][1] * scale + offsety)
+    ]
 
     for dot in trcoords:
         x_cord = dot[0] * scale + offsetx
         result_draw.append(x_cord)
         y_cord = winy - (dot[1] * scale + offsety)
         result_draw.append(y_cord)
+    result_draw.append(result_draw[0])
+    result_draw.append(result_draw[1])
 
-    root.image.create_line(*result_draw, result_draw[0], result_draw[1],
-                           width=4, fill="blue")
+    root.image.create_line(*result_draw, width=4, fill="blue")
+    root.image.create_line(*altitude_draw, width=4, fill="green")
+    root.image.create_line(*bisector_draw, width=4, fill="red")
