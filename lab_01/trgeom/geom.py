@@ -50,9 +50,12 @@ def find_solution(dots):
                                  dset[1][1], dset[2][0], dset[2][1])
             bisector = bisectorp(dset[0][0], dset[0][1], dset[1][0],
                                  dset[1][1], dset[2][0], dset[2][1])
-            angle = ang(dset[0][0], dset[0][1],
-                        altitude[0], altitude[1],
-                        bisector[0], bisector[1])
+            try:
+                angle = ang(dset[0][0], dset[0][1],
+                            altitude[0], altitude[1],
+                            bisector[0], bisector[1])
+            except ValueError:
+                angle = 0
             print(f"Angle is {angle}")
             if angle < best_ang:
                 best_ang = angle
@@ -60,7 +63,5 @@ def find_solution(dots):
                 solution = (sset, altitude, bisector, best_ang)
             dset.rotate(-i)
             i += 1
-
-    print(solution)
 
     return solution
