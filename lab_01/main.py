@@ -1,8 +1,17 @@
+"""
+    Main routine.
+"""
+
 import tkinter as tk
+from tkinter import messagebox
 from trview import view
 
 
 class RootWindow(tk.Tk):
+    """
+        Representation of root program window.
+    """
+
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
@@ -94,6 +103,10 @@ class RootWindow(tk.Tk):
 
 
 class DotWindow(tk.Toplevel):
+    """
+        Representation of dot action window.
+    """
+
     def __init__(self, *args, **kwargs):
         tk.Toplevel.__init__(self, *args, **kwargs)
 
@@ -158,12 +171,18 @@ class DotWindow(tk.Toplevel):
 
 
 def add_action(root):
+    """
+        Adding dot.
+    """
     global DOTACTION, MODE
     MODE = 0
     DOTACTION = DotWindow(root)
 
 
 def edit_action(root):
+    """
+        Editing dot.
+    """
     global DOTACTION, MODE, EDIT
     MODE = 1
     DOTACTION = DotWindow(root)
@@ -180,4 +199,7 @@ if __name__ == "__main__":
     EDIT = None
     MODE = None
     ROOT = RootWindow()
+    messagebox.showinfo("Условие задачи", "На плоскости дано множество точек. "
+                        "Найти такой треугольник, у которого угол между биссектрисой и высотой, "
+                        "выходящими из одной вершины, максимален.")
     ROOT.mainloop()

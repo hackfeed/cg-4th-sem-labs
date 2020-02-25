@@ -4,31 +4,47 @@
 
 import tkinter as tk
 from tkinter import messagebox
+import math
 from trgeom import geom
 
 
 def disable_btns(root):
+    """
+        Disable delete and edit buttons.
+    """
     root.delbtn.configure(state="disabled")
     root.editbtn.configure(state="disabled")
 
 
 def enable_btns(root):
+    """
+        Enable delete and edit buttons.
+    """
     root.delbtn.configure(state="normal")
     root.editbtn.configure(state="normal")
 
 
 def clean_scr(root):
+    """
+        Clean listbox and canvas from the root window.
+    """
     root.dotslist.delete(0, tk.END)
     root.image.delete("all")
     disable_btns(root)
 
 
 def check_lb(event, root, listbox):
+    """
+        Check if something is checked in the listbox.
+    """
     if list(map(int, listbox.curselection())) != []:
         enable_btns(root)
 
 
 def is_present(dot, root):
+    """
+        Check if dot is already in the listbox.
+    """
     raw = root.dotslist.get(0, tk.END)
     for item in raw:
         if dot == item:
@@ -38,31 +54,44 @@ def is_present(dot, root):
 
 
 def config_dot(dotwindow, root, mode, ind):
+    """
+        Add or edit dot.
+    """
     try:
         xcoord = float(dotwindow.xentry.get())
         ycoord = float(dotwindow.yentry.get())
         dot = f"{xcoord};{ycoord}"
         if is_present(dot, root):
-            messagebox.showinfo("Dot info", "Dot already exists")
+            messagebox.showinfo("Информация о точке", "Такая точка уже существует")
             return
         if mode == 1:
             root.dotslist.delete(ind)
             root.dotslist.insert(ind, dot)
             dotwindow.destroy()
             disable_btns(root)
+            root.image.delete("all")
         else:
             root.dotslist.insert(tk.END, dot)
             disable_btns(root)
+            root.image.delete("all")
     except ValueError:
-        messagebox.showerror("Input error", "Can't get float data. Check ypur input.")
+        messagebox.showerror(
+            "Ошибка ввода", "Невозможно получить вещественное число. Проверьте корректность ввода.")
 
 
 def del_dot(root):
+    """
+        Delete dot from the listbox.
+    """
     root.dotslist.delete(tk.ANCHOR)
     disable_btns(root)
+    root.image.delete("all")
 
 
 def get_dots(root):
+    """
+        Get all dots from the listbox.
+    """
     raw = root.dotslist.get(0, tk.END)
     items = []
     for item in raw:
@@ -72,10 +101,19 @@ def get_dots(root):
 
 
 def draw_triangle(root):
+    """
+        Draw flex triangle.
+    """
     root.image.delete("all")
     dots = get_dots(root)
     solution = geom.find_solution(dots)
-    trcoords = solution[0]
+
+    if solution is None:
+        messagebox.showinfo("Невозможно найти решение", "Для заданного набора точек невозможно "
+                            "найти решение.")
+        return
+
+    trcoords = solution[0]  # .extend(solution)
 
     winx = 580
     winy = 580
@@ -128,6 +166,36 @@ def draw_triangle(root):
     result_draw.append(result_draw[0])
     result_draw.append(result_draw[1])
 
+    for i in range(1, 6, 2):
+        if result_draw[i] == max(result_draw[1], result_draw[3], result_draw[5]):
+            root.image.create_text(result_draw[i-1],
+                                   result_draw[i] + 15,
+                                   fill="black",
+                                   font="-family {Consolas} -size 14",
+                                   text=f"({trcoords[i // 2][0]};{trcoords[i // 2][1]})")
+        elif result_draw[i] == min(result_draw[1], result_draw[3], result_draw[5]):
+            root.image.create_text(result_draw[i-1],
+                                   result_draw[i] - 15,
+                                   fill="black",
+                                   font="-family {Consolas} -size 14",
+                                   text=f"({trcoords[i // 2][0]};{trcoords[i // 2][1]})")
+        elif result_draw[i - 1] == max(result_draw[0], result_draw[2], result_draw[4]):
+            root.image.create_text(result_draw[i-1] + 10,
+                                   result_draw[i] + 15,
+                                   fill="black",
+                                   font="-family {Consolas} -size 14",
+                                   text=f"({trcoords[i // 2][0]};{trcoords[i // 2][1]})")
+        else:
+            root.image.create_text(result_draw[i-1] - 10,
+                                   result_draw[i] + 15,
+                                   fill="black",
+                                   font="-family {Consolas} -size 14",
+                                   text=f"({trcoords[i // 2][0]};{trcoords[i // 2][1]})")
     root.image.create_line(*result_draw, width=4, fill="blue")
     root.image.create_line(*altitude_draw, width=4, fill="green")
     root.image.create_line(*bisector_draw, width=4, fill="red")
+    messagebox.showinfo("Решение", "Координаты построенного треугольника "
+                        "Вы можете увидеть в окне с построением.\n"
+                        "Красный отрезок - биссектриса.\n Зеленый отрезок - высота.\n"
+                        "Угол между биссектрисой и высотой равен "
+                        f"{math.degrees(solution[3]):.2f} градусов.")
