@@ -90,6 +90,7 @@ class RootWindow(tk.Tk):
         self.solvebtn.configure(activebackground="#000080")
         self.solvebtn.configure(font="-family {Consolas} -size 12")
         self.solvebtn.configure(text="Решить задачу")
+        self.solvebtn.configure(command=lambda: view.draw_triangle(self))
 
 
 class DotWindow(tk.Toplevel):
@@ -135,7 +136,7 @@ class DotWindow(tk.Toplevel):
         self.okbtn.configure(activebackground="#000080")
         self.okbtn.configure(font="-family {Consolas} -size 12")
         self.okbtn.configure(text="OK")
-        self.okbtn.configure(command=lambda: view.dot(DOTACTION, ROOT, MODE))
+        self.okbtn.configure(command=lambda: view.config_dot(DOTACTION, ROOT, MODE, EDIT))
 
         self.xlabel = tk.Label(self)
         self.xlabel.place(relx=0.042, rely=0.077, height=19, width=96)
@@ -163,11 +164,11 @@ def add_action(root):
 
 
 def edit_action(root):
-    global DOTACTION, MODE
+    global DOTACTION, MODE, EDIT
     MODE = 1
     DOTACTION = DotWindow(root)
-    ind = root.dotslist.curselection()
-    item = root.dotslist.get(ind[0]).split(";")
+    EDIT = root.dotslist.curselection()[0]
+    item = root.dotslist.get(EDIT).split(";")
     DOTACTION.xentry.delete(0, tk.END)
     DOTACTION.xentry.insert(0, item[0])
     DOTACTION.yentry.delete(0, tk.END)
@@ -176,6 +177,7 @@ def edit_action(root):
 
 if __name__ == "__main__":
     DOTACTION = None
-    MODE = 0
+    EDIT = None
+    MODE = None
     ROOT = RootWindow()
     ROOT.mainloop()
