@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from imgact.draw import fish
 
 
 class RootWindow(tk.Tk):
@@ -255,4 +256,9 @@ class RootWindow(tk.Tk):
 
 if __name__ == "__main__":
     ROOT = RootWindow()
+    ROOT.image.create_line(*fish.body)
+    ROOT.image.create_line(*fish.head)
+    ROOT.image.create_line(*fish.eye)
+    ROOT.image.create_line(*fish.mouth)
+    ROOT.image.create_line(*fish.upper_fin)
     ROOT.mainloop()
