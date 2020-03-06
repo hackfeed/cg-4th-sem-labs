@@ -256,9 +256,5 @@ class RootWindow(tk.Tk):
 
 if __name__ == "__main__":
     ROOT = RootWindow()
-    ROOT.image.create_line(*fish.body)
-    ROOT.image.create_line(*fish.head)
-    ROOT.image.create_line(*fish.eye)
-    ROOT.image.create_line(*fish.mouth)
-    ROOT.image.create_line(*fish.upper_fin)
+    fish.draw(ROOT.image)
     ROOT.mainloop()
