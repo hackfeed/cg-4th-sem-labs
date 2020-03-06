@@ -257,4 +257,7 @@ class RootWindow(tk.Tk):
 if __name__ == "__main__":
     ROOT = RootWindow()
     fish.draw(ROOT.image)
+    fish.rotate(420, 340, 60)
+    fish.draw(ROOT.image)
+
     ROOT.mainloop()
