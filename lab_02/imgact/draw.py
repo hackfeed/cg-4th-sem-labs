@@ -185,36 +185,46 @@ class Fish:
         sina = sin(radians(angle))
 
         for i in range(0, len(self.body), 2):
-            self.body[i] = rx + (self.body[i] - rx) * cosa + (self.body[i+1] - ry) * sina
-            self.body[i+1] = ry - (self.body[i] - rx) * sina + (self.body[i+1] - ry) * cosa
+            x = self.body[i]
+            y = self.body[i+1]
+            self.body[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.body[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.head), 2):
-            self.head[i] = rx + (self.head[i] - rx) * cosa + (self.head[i+1] - ry) * sina
-            self.head[i+1] = ry - (self.head[i] - rx) * sina + (self.head[i+1] - ry) * cosa
+            x = self.head[i]
+            y = self.head[i+1]
+            self.head[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.head[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.eye), 2):
-            self.eye[i] = rx + (self.eye[i] - rx) * cosa + (self.eye[i+1] - ry) * sina
-            self.eye[i+1] = ry - (self.eye[i] - rx) * sina + (self.eye[i+1] - ry) * cosa
+            x = self.eye[i]
+            y = self.eye[i+1]
+            self.eye[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.eye[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.mouth), 2):
-            self.mouth[i] = rx + (self.mouth[i] - rx) * cosa + (self.mouth[i+1] - ry) * sina
-            self.mouth[i+1] = ry - (self.mouth[i] - rx) * sina + (self.mouth[i+1] - ry) * cosa
+            x = self.mouth[i]
+            y = self.mouth[i+1]
+            self.mouth[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.mouth[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.upper_fin), 2):
-            self.upper_fin[i] = rx + (self.upper_fin[i] - rx) * cosa + \
-                (self.upper_fin[i+1] - ry) * sina
-            self.upper_fin[i+1] = ry - (self.upper_fin[i] - rx) * sina + \
-                (self.upper_fin[i+1] - ry) * cosa
+            x = self.upper_fin[i]
+            y = self.upper_fin[i+1]
+            self.upper_fin[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.upper_fin[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.lower_fin), 2):
-            self.lower_fin[i] = rx + (self.lower_fin[i] - rx) * cosa + \
-                (self.lower_fin[i+1] - ry) * sina
-            self.lower_fin[i+1] = ry - (self.lower_fin[i] - rx) * sina + \
-                (self.lower_fin[i+1] - ry) * cosa
+            x = self.lower_fin[i]
+            y = self.lower_fin[i+1]
+            self.lower_fin[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.lower_fin[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
         for i in range(0, len(self.tail), 2):
-            self.tail[i] = rx + (self.tail[i] - rx) * cosa + (self.tail[i+1] - ry) * sina
-            self.tail[i+1] = ry - (self.tail[i] - rx) * sina + (self.tail[i+1] - ry) * cosa
+            x = self.tail[i]
+            y = self.tail[i+1]
+            self.tail[i] = rx + (x - rx) * cosa + (y - ry) * sina
+            self.tail[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
 
 fish = Fish()
