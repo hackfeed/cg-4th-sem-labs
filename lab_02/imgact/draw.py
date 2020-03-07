@@ -1,3 +1,8 @@
+"""
+    Fish drawing class representation.
+"""
+
+
 from math import pi, sin, cos, sqrt, radians
 
 
@@ -21,6 +26,10 @@ class Fish:
         self.tail = self.get_tail()
 
     def get_body(self, a, b):
+        """
+            Get fish body dots.
+        """
+
         body = []
         t = 0
 
@@ -34,6 +43,10 @@ class Fish:
         return body
 
     def get_head(self):
+        """
+            Get fish head dots.
+        """
+
         body = self.body
         start_p = [body[0], body[1]]
         end_p = [body[len(body)-2], body[len(body) - 1]]
@@ -52,6 +65,10 @@ class Fish:
         return head
 
     def get_eye(self):
+        """
+            Get fish eye dots.
+        """
+
         head = self.head
         eye = []
         t = 0
@@ -67,6 +84,10 @@ class Fish:
         return eye
 
     def get_mouth(self):
+        """
+            Get fish mouth dots.
+        """
+
         head = self.head
         h_r = (head[0] - head[len(head) // 2]) / 2
         mouth = [
@@ -77,6 +98,10 @@ class Fish:
         return mouth
 
     def get_upper_fin(self):
+        """
+            Get fish upper fin dots.
+        """
+
         body = self.body
         upper_fin = [
             body[len(body)-14], body[len(body)-13],
@@ -88,6 +113,10 @@ class Fish:
         return upper_fin
 
     def get_lower_fin(self):
+        """
+            Get fish lower fin dots.
+        """
+
         body = self.body
         lower_fin = [
             body[14], body[15],
@@ -99,6 +128,10 @@ class Fish:
         return lower_fin
 
     def get_tail(self):
+        """
+            Get fish tail dots.
+        """
+
         body = self.body
         tail = [
             body[len(body) // 2 + 5], body[len(body) // 2 + 6],
@@ -114,6 +147,10 @@ class Fish:
         return tail
 
     def draw(self, canvas):
+        """
+            Draw fish to canvas.
+        """
+
         canvas.create_line(*self.body, fill=Fish.body_color, width=2)
         canvas.create_line(*self.head, fill=Fish.limb_color, width=2)
         canvas.create_line(*self.eye, fill=Fish.eye_color, width=2)
@@ -123,6 +160,10 @@ class Fish:
         canvas.create_line(*self.tail, fill=Fish.limb_color, width=2)
 
     def move(self, dx, dy):
+        """
+            Move model.
+        """
+
         for i in range(0, len(self.body), 2):
             self.body[i] += dx
             self.body[i+1] += dy
@@ -151,36 +192,11 @@ class Fish:
             self.tail[i] += dx
             self.tail[i+1] += dy
 
-    def scale(self, sx, sy, kx, ky):
-        for i in range(0, len(self.body), 2):
-            self.body[i] = kx * self.body[i] + (1 - kx) * sx
-            self.body[i+1] = ky * self.body[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.head), 2):
-            self.head[i] = kx * self.head[i] + (1 - kx) * sx
-            self.head[i+1] = ky * self.head[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.eye), 2):
-            self.eye[i] = kx * self.eye[i] + (1 - kx) * sx
-            self.eye[i+1] = ky * self.eye[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.mouth), 2):
-            self.mouth[i] = kx * self.mouth[i] + (1 - kx) * sx
-            self.mouth[i+1] = ky * self.mouth[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.upper_fin), 2):
-            self.upper_fin[i] = kx * self.upper_fin[i] + (1 - kx) * sx
-            self.upper_fin[i+1] = ky * self.upper_fin[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.lower_fin), 2):
-            self.lower_fin[i] = kx * self.lower_fin[i] + (1 - kx) * sx
-            self.lower_fin[i+1] = ky * self.lower_fin[i+1] + (1 - ky) * sy
-
-        for i in range(0, len(self.tail), 2):
-            self.tail[i] = kx * self.tail[i] + (1 - kx) * sx
-            self.tail[i+1] = ky * self.tail[i+1] + (1 - ky) * sy
-
     def rotate(self, rx, ry, angle):
+        """
+            Rotate model.
+        """
+
         cosa = cos(radians(angle))
         sina = sin(radians(angle))
 
@@ -226,5 +242,35 @@ class Fish:
             self.tail[i] = rx + (x - rx) * cosa + (y - ry) * sina
             self.tail[i+1] = ry - (x - rx) * sina + (y - ry) * cosa
 
+    def scale(self, sx, sy, kx, ky):
+        """
+            Scale model.
+        """
 
-fish = Fish()
+        for i in range(0, len(self.body), 2):
+            self.body[i] = kx * self.body[i] + (1 - kx) * sx
+            self.body[i+1] = ky * self.body[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.head), 2):
+            self.head[i] = kx * self.head[i] + (1 - kx) * sx
+            self.head[i+1] = ky * self.head[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.eye), 2):
+            self.eye[i] = kx * self.eye[i] + (1 - kx) * sx
+            self.eye[i+1] = ky * self.eye[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.mouth), 2):
+            self.mouth[i] = kx * self.mouth[i] + (1 - kx) * sx
+            self.mouth[i+1] = ky * self.mouth[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.upper_fin), 2):
+            self.upper_fin[i] = kx * self.upper_fin[i] + (1 - kx) * sx
+            self.upper_fin[i+1] = ky * self.upper_fin[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.lower_fin), 2):
+            self.lower_fin[i] = kx * self.lower_fin[i] + (1 - kx) * sx
+            self.lower_fin[i+1] = ky * self.lower_fin[i+1] + (1 - ky) * sy
+
+        for i in range(0, len(self.tail), 2):
+            self.tail[i] = kx * self.tail[i] + (1 - kx) * sx
+            self.tail[i+1] = ky * self.tail[i+1] + (1 - ky) * sy
