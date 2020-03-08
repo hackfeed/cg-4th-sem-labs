@@ -25,6 +25,9 @@ class Fish:
         self.lower_fin = self.get_lower_fin()
         self.tail = self.get_tail()
 
+    def reset(self):
+        self.__init__()
+
     def get_body(self, a, b):
         """
             Get fish body dots.

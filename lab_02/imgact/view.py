@@ -107,7 +107,7 @@ def reset(root, img, states):
 
     root.image.delete("all")
     states.clear()
-    img = Fish()
+    img.reset()
     img.scale(420, 340, 0.7, 0.7)
     img.draw(root.image)
     check_states(root, states)
