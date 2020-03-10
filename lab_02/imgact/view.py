@@ -69,14 +69,18 @@ def scale(root, img, states):
         check_states(root, states)
 
 
-def step_back(root, states):
+def step_back(root, img, states):
     """
         Rollback to previous state.
     """
 
     root.image.delete("all")
-    img = states.pop()
-    img.draw(root.image)
+    imgn = states.pop()
+    if states == []:
+        states.clear()
+        img.reset()
+        img.scale(420, 340, 0.7, 0.7)
+    imgn.draw(root.image)
     check_states(root, states)
 
 

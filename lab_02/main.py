@@ -314,7 +314,7 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Шаг назад",
-            command=lambda: view.step_back(ROOT, STATES)
+            command=lambda: view.step_back(ROOT, FISH, STATES)
         )
 
         self.resetbtn = tk.Button(self)
