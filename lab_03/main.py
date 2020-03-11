@@ -1,4 +1,5 @@
 import tkinter as tk
+from linedraw import dda, util
 
 
 class RootWindow(tk.Tk):
@@ -319,4 +320,6 @@ class RootWindow(tk.Tk):
 
 if __name__ == "__main__":
     ROOT = RootWindow()
+    dots = dda.dda(10, 10, 840, 60)
+    util.draw_line(ROOT.image, dots)
     ROOT.mainloop()
