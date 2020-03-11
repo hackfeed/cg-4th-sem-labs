@@ -332,6 +332,8 @@ class RootWindow(tk.Tk):
 if __name__ == "__main__":
     ROOT = RootWindow()
     STATES = []
+    ROOT.image.create_oval(419, 339, 421, 341, fill="red")
+    ROOT.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
     FISH = Fish()
     FISH.scale(420, 340, 0.7, 0.7)
     FISH.draw(ROOT.image)

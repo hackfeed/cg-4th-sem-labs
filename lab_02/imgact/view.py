@@ -25,6 +25,8 @@ def move(root, img, states):
         img.move(dx, dy)
         root.image.delete("all")
         img.draw(root.image)
+        root.image.create_oval(419, 339, 421, 341, fill="red")
+        root.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
         check_states(root, states)
 
 
@@ -45,6 +47,8 @@ def rotate(root, img, states):
         img.rotate(rx, ry, angle)
         root.image.delete("all")
         img.draw(root.image)
+        root.image.create_oval(419, 339, 421, 341, fill="red")
+        root.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
         check_states(root, states)
 
 
@@ -66,6 +70,8 @@ def scale(root, img, states):
         img.scale(mx, my, kx, ky)
         root.image.delete("all")
         img.draw(root.image)
+        root.image.create_oval(419, 339, 421, 341, fill="red")
+        root.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
         check_states(root, states)
 
 
@@ -81,6 +87,8 @@ def step_back(root, img, states):
         img.reset()
         img.scale(420, 340, 0.7, 0.7)
     imgn.draw(root.image)
+    root.image.create_oval(419, 339, 421, 341, fill="red")
+    root.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
     check_states(root, states)
 
 
@@ -114,6 +122,8 @@ def reset(root, img, states):
     img.reset()
     img.scale(420, 340, 0.7, 0.7)
     img.draw(root.image)
+    root.image.create_oval(419, 339, 421, 341, fill="red")
+    root.image.create_text(420, 350, text="(420;340)", font="-family {Consolas} -size 14")
     check_states(root, states)
 
 
