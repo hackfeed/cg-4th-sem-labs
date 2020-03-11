@@ -43,8 +43,8 @@ class RootWindow(tk.Tk):
             text="""МЕТОД ПОСТРОЕНИЯ"""
         )
 
-        self.methodlst = tk.Listbox(self)
-        self.methodlst.place(relx=0.039, rely=0.097, relheight=0.125, relwidth=0.25)
+        self.methodlst = tk.Listbox(self, exportselection=0)
+        self.methodlst.place(relx=0.039, rely=0.097, relheight=0.181, relwidth=0.25)
         self.methodlst.configure(
             background="white",
             foreground="black",
@@ -52,10 +52,16 @@ class RootWindow(tk.Tk):
             selectforeground="white",
             font="-family {Consolas} -size 14"
         )
+        self.methodlst.insert(tk.END, "ЦДА")
+        self.methodlst.insert(tk.END, "Брезенхем (int)")
+        self.methodlst.insert(tk.END, "Брезенхем (float)")
+        self.methodlst.insert(tk.END, "Брезенхем (сглаживание)")
+        self.methodlst.insert(tk.END, "Ву")
+        self.methodlst.insert(tk.END, "Библиотечная функция")
 
         # Drawing color section.
         self.colorlb = tk.Label(self)
-        self.colorlb.place(relx=0.039, rely=0.235, height=41, width=320)
+        self.colorlb.place(relx=0.039, rely=0.289, height=41, width=320)
         self.colorlb.configure(
             activebackground="#000080",
             activeforeground="white",
@@ -65,8 +71,8 @@ class RootWindow(tk.Tk):
             text="""ЦВЕТ ПОСТРОЕНИЯ"""
         )
 
-        self.colorlst = tk.Listbox(self)
-        self.colorlst.place(relx=0.039, rely=0.292, relheight=0.125, relwidth=0.25)
+        self.colorlst = tk.Listbox(self, exportselection=0)
+        self.colorlst.place(relx=0.039, rely=0.347, relheight=0.069, relwidth=0.25)
         self.colorlst.configure(
             background="white",
             foreground="black",
@@ -74,6 +80,8 @@ class RootWindow(tk.Tk):
             selectforeground="white",
             font="-family {Consolas} -size 14"
         )
+        self.colorlst.insert(tk.END, "Синий")
+        self.colorlst.insert(tk.END, "Фоновый")
 
         # Line coordinates section.
         self.linelb = tk.Label(self)
@@ -157,6 +165,9 @@ class RootWindow(tk.Tk):
             highlightbackground="black",
             relief="flat",
             selectbackground="#c4c4c4",
+            from_=0.0,
+            to=680.0,
+            increment=1.0,
             textvariable=tk.DoubleVar()
         )
 
@@ -172,6 +183,9 @@ class RootWindow(tk.Tk):
             highlightbackground="black",
             relief="flat",
             selectbackground="#c4c4c4",
+            from_=0.0,
+            to=840.0,
+            increment=1.0,
             textvariable=tk.DoubleVar()
         )
 
@@ -187,6 +201,9 @@ class RootWindow(tk.Tk):
             highlightbackground="black",
             relief="flat",
             selectbackground="#c4c4c4",
+            from_=0.0,
+            to=680.0,
+            increment=1.0,
             textvariable=tk.DoubleVar()
         )
 
@@ -244,6 +261,9 @@ class RootWindow(tk.Tk):
             highlightbackground="black",
             relief="flat",
             selectbackground="#c4c4c4",
+            from_=0.0,
+            to=340.0,
+            increment=1.0,
             textvariable=tk.DoubleVar()
         )
 
@@ -259,6 +279,9 @@ class RootWindow(tk.Tk):
             highlightbackground="black",
             relief="flat",
             selectbackground="#c4c4c4",
+            from_=0.0,
+            to=100.0,
+            increment=1.0,
             textvariable=tk.DoubleVar()
         )
 
