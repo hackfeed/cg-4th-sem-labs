@@ -1,5 +1,6 @@
 import tkinter as tk
-from linedraw import dda, util
+import colorutils as cu
+from linedraw import dda, bresenham, util
 
 
 class RootWindow(tk.Tk):
@@ -320,6 +321,11 @@ class RootWindow(tk.Tk):
 
 if __name__ == "__main__":
     ROOT = RootWindow()
-    dots = dda.dda(10, 10, 840, 60)
-    util.draw_line(ROOT.image, dots)
+    color = cu.Color((0, 0, 255))
+    dotsd = dda.dda(10, 50, 840, 10, color.hex)
+    print(dotsd)
+    dotsb = bresenham.bresenham_int(10, 100, 840, 60, color.hex)
+    print(dotsb)
+    util.draw_line(ROOT.image, dotsd)
+    util.draw_line(ROOT.image, dotsb)
     ROOT.mainloop()

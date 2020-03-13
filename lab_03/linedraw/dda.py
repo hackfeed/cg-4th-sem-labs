@@ -3,7 +3,7 @@
 """
 
 
-def dda(x_start, y_start, x_end, y_end):
+def dda(x_start, y_start, x_end, y_end, color):
     """
         Implementation of DDA algorithm.
     """
@@ -19,11 +19,11 @@ def dda(x_start, y_start, x_end, y_end):
     x = x_start
     y = y_start
 
-    dots = [[x, y]]
+    dots = [[x, y, color]]
 
     for _ in range(l):
         x += dx
         y += dy
-        dots.extend([[x, y]])
+        dots.extend([[x, y, color]])
 
     return dots

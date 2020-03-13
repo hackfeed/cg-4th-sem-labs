@@ -5,12 +5,12 @@
 import tkinter as tk
 
 
-def set_pixel(canvas, x, y):
+def set_pixel(canvas, x, y, color):
     """
         Draw single pixel.
     """
 
-    canvas.create_line(x, y, x+1, y)
+    canvas.create_line(x, y, x+1, y, fill=color)
 
 
 def draw_line(canvas, line):
@@ -19,4 +19,4 @@ def draw_line(canvas, line):
     """
 
     for dot in line:
-        set_pixel(canvas, dot[0], dot[1])
+        set_pixel(canvas, dot[0], dot[1], dot[2])
