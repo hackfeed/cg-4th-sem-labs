@@ -61,6 +61,7 @@ def bresenham_db(x_start, y_start, x_end, y_end, color):
     m = dy / dx
     e = m - 0.5
     y = 0
+    x = 0
 
     dots = []
 
@@ -70,5 +71,6 @@ def bresenham_db(x_start, y_start, x_end, y_end, color):
             y += 1
             e -= 1
         e += m
+        x += 1
 
     return dots

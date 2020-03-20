@@ -10,7 +10,7 @@ def set_pixel(canvas, x, y, color):
         Draw single pixel.
     """
 
-    canvas.create_line(x, y, x+1, y, fill=color)
+    canvas.create_line(x, y, x+1, y, fill=color.hex)
 
 
 def draw_line(canvas, line):

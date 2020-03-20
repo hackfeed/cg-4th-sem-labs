@@ -1,6 +1,5 @@
 import tkinter as tk
-import colorutils as cu
-from linedraw import dda, bresenham, util
+import linedraw.view
 
 
 class RootWindow(tk.Tk):
@@ -60,6 +59,8 @@ class RootWindow(tk.Tk):
         self.methodlst.insert(tk.END, "Брезенхем (сглаживание)")
         self.methodlst.insert(tk.END, "Ву")
         self.methodlst.insert(tk.END, "Библиотечная функция")
+        self.methodlst.bind("<Button-1>", lambda event,
+                            listbox=self.methodlst: linedraw.view.check_lb(event, ROOT))
 
         # Drawing color section.
         self.colorlb = tk.Label(self)
@@ -84,6 +85,8 @@ class RootWindow(tk.Tk):
         )
         self.colorlst.insert(tk.END, "Синий")
         self.colorlst.insert(tk.END, "Фоновый")
+        self.colorlst.bind("<Button-1>", lambda event,
+                           listbox=self.colorlst: linedraw.view.check_lb(event, ROOT))
 
         # Line coordinates section.
         self.linelb = tk.Label(self)
@@ -152,7 +155,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=840.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.ystartsb = tk.Spinbox(self)
@@ -170,7 +173,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=680.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.xendsb = tk.Spinbox(self)
@@ -188,7 +191,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=840.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.yendsb = tk.Spinbox(self)
@@ -206,7 +209,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=680.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.drawbtn = tk.Button(self)
@@ -216,7 +219,9 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="""Нарисовать линию"""
+            text="""Нарисовать линию""",
+            state="disabled",
+            command=lambda: linedraw.view.draw(ROOT)
         )
 
         # Bunch drawing section.
@@ -251,9 +256,9 @@ class RootWindow(tk.Tk):
             text="""Шаги"""
         )
 
-        self.radbsb = tk.Spinbox(self)
-        self.radbsb.place(relx=0.039, rely=0.711, relheight=0.042, relwidth=0.125)
-        self.radbsb.configure(
+        self.radsb = tk.Spinbox(self)
+        self.radsb.place(relx=0.039, rely=0.711, relheight=0.042, relwidth=0.125)
+        self.radsb.configure(
             activebackground="#f9f9f9",
             background="white",
             foreground="black",
@@ -266,7 +271,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=340.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.stepsb = tk.Spinbox(self)
@@ -284,7 +289,7 @@ class RootWindow(tk.Tk):
             from_=0.0,
             to=100.0,
             increment=1.0,
-            textvariable=tk.DoubleVar()
+            textvariable=tk.IntVar()
         )
 
         self.drawbunchbtn = tk.Button(self)
@@ -294,7 +299,9 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="""Построить пучок"""
+            text="""Построить пучок""",
+            state="disabled",
+            command=lambda: linedraw.view.draw_bunch(ROOT)
         )
 
         # Additional stuff section.
@@ -315,17 +322,11 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="""Очистить экран"""
+            text="""Очистить экран""",
+            command=lambda: linedraw.view.reset(ROOT)
         )
 
 
 if __name__ == "__main__":
     ROOT = RootWindow()
-    color = cu.Color((0, 0, 255))
-    dotsd = dda.dda(10, 50, 840, 10, color.hex)
-    print(dotsd)
-    dotsb = bresenham.bresenham_int(10, 100, 840, 60, color.hex)
-    print(dotsb)
-    util.draw_line(ROOT.image, dotsd)
-    util.draw_line(ROOT.image, dotsb)
     ROOT.mainloop()
