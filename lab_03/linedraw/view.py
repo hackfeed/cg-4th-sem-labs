@@ -97,12 +97,17 @@ def draw(root):
     elif method == "Брезенхем (сглаживание)":
         pass
     elif method == "Ву":
-        pass
+        func = wu.wu
     elif method == "Библиотечная функция":
         root.image.create_line(x_start, y_start, x_end, y_end, fill=color_cu.hex)
 
     dots = func(x_start, y_start, x_end, y_end, color_cu)
-    util.draw_line(root.image, dots)
+
+    if func == wu.wu:
+        util.draw_line(root.image, dots[0])
+        util.draw_line(root.image, dots[1])
+    else:
+        util.draw_line(root.image, dots)
 
 
 def draw_bunch(root):
@@ -151,7 +156,7 @@ def draw_bunch(root):
     elif method == "Брезенхем (сглаживание)":
         pass
     elif method == "Ву":
-        pass
+        func = wu.wu
     elif method == "Библиотечная функция":
         func = root.image.create_line
 
@@ -164,12 +169,13 @@ def draw_bunch(root):
 
         dots.append((int(x_s), int(y_s), int(x_e), int(y_e)))
 
-    print(dots)
-
     for pair in dots:
-        print(pair)
         if func == root.image.create_line:
             func(pair[0], pair[1], pair[2], pair[3], fill=color_cu.hex)
         else:
             ds = func(pair[0], pair[1], pair[2], pair[3], color_cu)
-            util.draw_line(root.image, ds)
+            if func == wu.wu:
+                util.draw_line(root.image, ds[0])
+                util.draw_line(root.image, ds[1])
+            else:
+                util.draw_line(root.image, ds)
