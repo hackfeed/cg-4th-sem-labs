@@ -1,5 +1,6 @@
 import tkinter as tk
 import linedraw.view
+import linedraw.util
 
 
 class RootWindow(tk.Tk):
@@ -253,7 +254,7 @@ class RootWindow(tk.Tk):
             background="#000080",
             font="-family {Consolas} -size 14",
             foreground="#ffffff",
-            text="""Шаги"""
+            text="""Шаг,°"""
         )
 
         self.radsb = tk.Spinbox(self)
@@ -312,7 +313,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="""Сравнение алгоритмов"""
+            text="""Сравнение алгоритмов""",
+            command=lambda: linedraw.view.compare_algos(ROOT.image)
         )
 
         self.clrbtn = tk.Button(self)

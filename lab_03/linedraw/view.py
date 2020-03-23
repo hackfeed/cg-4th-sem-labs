@@ -4,6 +4,8 @@
 
 import colorutils as cu
 import tkinter as tk
+import matplotlib.pyplot as plt
+import numpy as np
 from tkinter import messagebox
 from math import cos, sin, radians
 
@@ -171,3 +173,28 @@ def draw_bunch(root):
         else:
             ds = func(pair[0], pair[1], pair[2], pair[3], color_cu)
             util.draw_line(root.image, ds)
+
+
+def compare_algos(canvas):
+    """
+        Show diagram with time measurements.
+    """
+
+    plt.rcParams["toolbar"] = "None"
+
+    taken_time = util.get_time(canvas)
+
+    objects = list(taken_time.keys())
+    performance = list(taken_time.values())
+
+    y_pos = np.arange(len(objects))
+
+    mng = plt.get_current_fig_manager()
+    mng.window.showMaximized()
+
+    plt.bar(y_pos, performance, align="center", alpha=0.5)
+    plt.xticks(y_pos, objects)
+    plt.ylabel("Затраченное время, единицы времени")
+    plt.title("Временная характеристика алгоритмов построения отрезков")
+
+    plt.show()
