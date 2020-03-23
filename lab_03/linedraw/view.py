@@ -95,7 +95,7 @@ def draw(root):
     elif method == "Брезенхем (float)":
         func = bresenham.bresenham_db
     elif method == "Брезенхем (сглаживание)":
-        pass
+        func = bresenham.bresenham_antialiased
     elif method == "Ву":
         func = wu.wu
     elif method == "Библиотечная функция":
@@ -103,11 +103,7 @@ def draw(root):
 
     dots = func(x_start, y_start, x_end, y_end, color_cu)
 
-    if func == wu.wu:
-        util.draw_line(root.image, dots[0])
-        util.draw_line(root.image, dots[1])
-    else:
-        util.draw_line(root.image, dots)
+    util.draw_line(root.image, dots)
 
 
 def draw_bunch(root):
@@ -154,7 +150,7 @@ def draw_bunch(root):
     elif method == "Брезенхем (float)":
         func = bresenham.bresenham_db
     elif method == "Брезенхем (сглаживание)":
-        pass
+        func = bresenham.bresenham_antialiased
     elif method == "Ву":
         func = wu.wu
     elif method == "Библиотечная функция":
@@ -174,8 +170,4 @@ def draw_bunch(root):
             func(pair[0], pair[1], pair[2], pair[3], fill=color_cu.hex)
         else:
             ds = func(pair[0], pair[1], pair[2], pair[3], color_cu)
-            if func == wu.wu:
-                util.draw_line(root.image, ds[0])
-                util.draw_line(root.image, ds[1])
-            else:
-                util.draw_line(root.image, ds)
+            util.draw_line(root.image, ds)
