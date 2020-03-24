@@ -117,7 +117,7 @@ def draw_bunch(root):
             "Ошибка ввода", "Невозможно получить число. Проверьте корректность ввода.")
         return
 
-    root.image.delete("all")
+    # root.image.delete("all")
 
     color_cu = None
 
