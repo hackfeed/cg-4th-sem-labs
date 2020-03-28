@@ -1,4 +1,5 @@
 import tkinter as tk
+from circledraw import view
 
 
 class RootWindow(tk.Tk):
@@ -43,7 +44,7 @@ class RootWindow(tk.Tk):
             text="ФИГУРА"
         )
 
-        self.shapelst = tk.Listbox(self)
+        self.shapelst = tk.Listbox(self, exportselection=0)
         self.shapelst.place(relx=0.039, rely=0.083, relheight=0.04, relwidth=0.25)
         self.shapelst.configure(
             background="white",
@@ -54,8 +55,8 @@ class RootWindow(tk.Tk):
         )
         self.shapelst.insert(tk.END, "Окружность")
         self.shapelst.insert(tk.END, "Эллипс")
-        # self.shapelst.bind("<Button-1>", lambda event,
-        #                    listbox=self.shapelst: pass)
+        self.shapelst.bind("<Button-1>", lambda event,
+                           listbox=self.shapelst: view.check_lb(event, ROOT))
 
         # Drawing method section.
         self.methodlb = tk.Label(self)
@@ -83,8 +84,8 @@ class RootWindow(tk.Tk):
         self.methodlst.insert(tk.END, "Алгоритм Брезенхема")
         self.methodlst.insert(tk.END, "Алгоритм средней точки")
         self.methodlst.insert(tk.END, "Библиотечная функция")
-        # self.methodlst.bind("<Button-1>", lambda event,
-        #                     listbox=self.methodlst: pass)
+        self.methodlst.bind("<Button-1>", lambda event,
+                            listbox=self.methodlst: view.check_lb(event, ROOT))
 
         # Drawing color section.
         self.colorlb = tk.Label(self)
@@ -109,8 +110,8 @@ class RootWindow(tk.Tk):
         )
         self.colorlst.insert(tk.END, "Синий")
         self.colorlst.insert(tk.END, "Фоновый")
-        # self.colorlst.bind("<Button-1>", lambda event,
-        #                    listbox=self.colorlst: pass)
+        self.colorlst.bind("<Button-1>", lambda event,
+                           listbox=self.colorlst: view.check_lb(event, ROOT))
 
         # Shape parameters section.
         self.shapeparlb = tk.Label(self)
@@ -245,7 +246,7 @@ class RootWindow(tk.Tk):
             font="-family {Consolas} -size 14",
             text="Построить фигуру",
             state="disabled",
-            # command=lambda: pass
+            command=lambda: view.draw(ROOT)
         )
 
         # Spectre drawing section.
@@ -462,12 +463,10 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Очистить экран",
-            # command=lambda: pass
+            command=lambda: view.reset(ROOT)
         )
 
 
 if __name__ == "__main__":
     ROOT = RootWindow()
-    ROOT.update()
-    print(ROOT.image.winfo_width(), ROOT.image.winfo_height())
     ROOT.mainloop()
