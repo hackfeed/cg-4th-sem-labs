@@ -1,5 +1,5 @@
 import tkinter as tk
-from circledraw import view
+from view import view
 
 
 class RootWindow(tk.Tk):

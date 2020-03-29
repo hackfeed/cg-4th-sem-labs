@@ -8,8 +8,9 @@ import numpy as np
 import colorutils as cu
 from tkinter import messagebox
 from math import cos, sin, radians
+from circledraw import canonical as ccan
 
-from circledraw import util
+from view import util
 
 
 def check_shape(root):
@@ -17,8 +18,11 @@ def check_shape(root):
         Check if circle or ellipse is chosen.
     """
 
-    shape_ind = root.shapelst.curselection()[0]
-    shape = root.shapelst.get(shape_ind)
+    try:
+        shape_ind = root.shapelst.curselection()[0]
+        shape = root.shapelst.get(shape_ind)
+    except (IndexError, UnboundLocalError):
+        pass
 
     if shape == "Окружность":
         root.r2sb.configure(state="disabled")
@@ -115,7 +119,7 @@ def draw(root):
         color_cu = cu.Color((255, 255, 255))
 
     if method == "Каноническое уравнение":
-        pass
+        func = ccan.cancircle
     elif method == "Параметрическое уравнение":
         pass
     elif method == "Алгоритм Брезенхема":
@@ -125,10 +129,12 @@ def draw(root):
     elif method == "Библиотечная функция":
         root.image.create_oval(x_center - r1, y_center - r2, x_center +
                                r1, y_center + r2, outline=color_cu.hex)
+        return
 
-    # dots = func(x_start, y_start, x_end, y_end, color_cu)
+    dots = func(x_center, y_center, r1, color_cu)
+    print(dots)
 
-    # util.draw_line(root.image, dots)
+    util.draw_line(root.image, dots)
 
 
 def draw_bunch(root):
