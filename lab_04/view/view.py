@@ -8,7 +8,7 @@ import numpy as np
 import colorutils as cu
 from tkinter import messagebox
 from math import cos, sin, radians
-from circledraw import canonical as ccan
+from circledraw import canonical as ccan, parametric as cpar, bresenham as cbres, midpoint as cmid
 
 from view import util
 
@@ -121,11 +121,11 @@ def draw(root):
     if method == "Каноническое уравнение":
         func = ccan.cancircle
     elif method == "Параметрическое уравнение":
-        pass
+        func = cpar.parcircle
     elif method == "Алгоритм Брезенхема":
-        pass
+        func = cbres.brescircle
     elif method == "Алгоритм средней точки":
-        pass
+        func = cmid.midpcircle
     elif method == "Библиотечная функция":
         root.image.create_oval(x_center - r1, y_center - r2, x_center +
                                r1, y_center + r2, outline=color_cu.hex)
