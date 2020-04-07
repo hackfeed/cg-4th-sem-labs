@@ -440,7 +440,7 @@ class RootWindow(tk.Tk):
             font="-family {Consolas} -size 14",
             text="Построить спектр",
             state="disabled",
-            # command=lambda: pass
+            command=lambda: view.draw_spectre(ROOT)
         )
 
         # Additional stuff section.
@@ -452,7 +452,7 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Сравнение алгоритмов",
-            # command=lambda: pass
+            command=lambda: view.compare_algos(ROOT.image)
         )
 
         self.clrbtn = tk.Button(self)

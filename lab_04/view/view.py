@@ -8,7 +8,7 @@ import numpy as np
 import colorutils as cu
 from tkinter import messagebox
 from math import cos, sin, radians
-from circledraw import canonical as ccan, parametric as cpar, bresenham as cbres, midpoint as cmid
+from circledraw import canonical, parametric, bresenham, midpoint
 
 from view import util
 
@@ -100,6 +100,7 @@ def draw(root):
     dots = None
     x_center, y_center, r1, r2 = None, None, None, None
     color_cu = None
+    func = None
 
     try:
         x_center = int(root.xcentersb.get())
@@ -110,37 +111,55 @@ def draw(root):
         messagebox.showerror(
             "Ошибка ввода", "Невозможно получить целое число. Проверьте корректность ввода.")
 
-    if shape == "Окружность":
-        r2 = r1
-
     if color == "Синий":
         color_cu = cu.Color((0, 0, 255))
     else:
         color_cu = cu.Color((255, 255, 255))
 
-    if method == "Каноническое уравнение":
-        func = ccan.cancircle
-    elif method == "Параметрическое уравнение":
-        func = cpar.parcircle
-    elif method == "Алгоритм Брезенхема":
-        func = cbres.brescircle
-    elif method == "Алгоритм средней точки":
-        func = cmid.midpcircle
-    elif method == "Библиотечная функция":
-        root.image.create_oval(x_center - r1, y_center - r2, x_center +
-                               r1, y_center + r2, outline=color_cu.hex)
-        return
+    if shape == "Окружность":
+        r2 = r1
 
-    dots = func(x_center, y_center, r1, color_cu)
-    print(dots)
+        if method == "Каноническое уравнение":
+            func = canonical.cancircle
+        elif method == "Параметрическое уравнение":
+            func = parametric.parcircle
+        elif method == "Алгоритм Брезенхема":
+            func = bresenham.brescircle
+        elif method == "Алгоритм средней точки":
+            func = midpoint.midpcircle
+        elif method == "Библиотечная функция":
+            root.image.create_oval(x_center - r1, y_center - r2, x_center +
+                                   r1, y_center + r2, outline=color_cu.hex)
+            return
+
+        dots = func(x_center, y_center, r1, color_cu)
+    else:
+        if method == "Каноническое уравнение":
+            func = canonical.canellipse
+        elif method == "Параметрическое уравнение":
+            func = parametric.parellipse
+        elif method == "Алгоритм Брезенхема":
+            func = bresenham.bresellipse
+        elif method == "Алгоритм средней точки":
+            func = midpoint.midpellipse
+        elif method == "Библиотечная функция":
+            root.image.create_oval(x_center - r1, y_center - r2, x_center +
+                                   r1, y_center + r2, outline=color_cu.hex)
+            return
+
+        dots = func(x_center, y_center, r1, r2, color_cu)
 
     util.draw_line(root.image, dots)
 
 
-def draw_bunch(root):
+def draw_spectre(root):
     try:
-        radius = int(root.radsb.get())
+        rs1 = int(root.rs1sb.get())
+        rs2 = int(root.rs2sb.get())
+        x_center = int(root.xscentersb.get())
+        y_center = int(root.yscentersb.get())
         step = int(root.stepsb.get())
+        n = int(root.nsb.get())
     except ValueError:
         messagebox.showerror(
             "Ошибка ввода", "Невозможно получить число. Проверьте корректность ввода.")
@@ -149,19 +168,10 @@ def draw_bunch(root):
     # root.image.delete("all")
 
     color_cu = None
+    func = None
 
-    lines = 360 // step
-
-    x_start = 420
-    y_start = 340 - radius
-    x_end = 420
-    y_end = 340
-
-    x_rotate = 420
-    y_rotate = 340
-
-    dots = [(x_start, y_start, x_end, y_end)]
-    fixed_step = step
+    shape_ind = root.shapelst.curselection()[0]
+    shape = root.shapelst.get(shape_ind)
 
     method_ind = root.methodlst.curselection()[0]
     method = root.methodlst.get(method_ind)
@@ -174,34 +184,60 @@ def draw_bunch(root):
     else:
         color_cu = cu.Color((255, 255, 255))
 
-    if method == "ЦДА":
-        func = dda.dda
-    elif method == "Брезенхем (int)":
-        func = bresenham.bresenham_int
-    elif method == "Брезенхем (float)":
-        func = bresenham.bresenham_db
-    elif method == "Брезенхем (сглаживание)":
-        func = bresenham.bresenham_antialiased
-    elif method == "Ву":
-        func = wu.wu
-    elif method == "Библиотечная функция":
-        func = root.image.create_line
+    if shape == "Окружность":
+        if method == "Каноническое уравнение":
+            func = canonical.cancircle
+        elif method == "Параметрическое уравнение":
+            func = parametric.parcircle
+        elif method == "Алгоритм Брезенхема":
+            func = bresenham.brescircle
+        elif method == "Алгоритм средней точки":
+            func = midpoint.midpcircle
+        elif method == "Библиотечная функция":
+            func = root.image.create_oval
 
-    for _ in range(1, lines):
-        x_s = x_rotate + (y_start - y_rotate) * sin(radians(step))
-        x_e = x_rotate + (y_end - y_rotate) * sin(radians(step))
-        y_s = y_rotate + (y_start - y_rotate) * cos(radians(step))
-        y_e = y_rotate + (y_end - y_rotate) * cos(radians(step))
-        step += fixed_step
+        if rs1 == 0:
+            rs1 = rs2 - step * n
+        if rs2 == 0:
+            rs2 = rs1 + step * n
+        if step == 0:
+            step = (rs2 - rs1) // n
 
-        dots.append((int(x_s), int(y_s), int(x_e), int(y_e)))
+        for radius in range(rs1, rs2, step):
+            if func == root.image.create_oval:
+                func(x_center - radius,
+                     y_center - radius,
+                     x_center + radius,
+                     y_center + radius,
+                     outline=color_cu.hex)
+            else:
+                dots = func(x_center, y_center, radius, color_cu)
+                util.draw_line(root.image, dots)
+    else:
+        if method == "Каноническое уравнение":
+            func = canonical.canellipse
+        elif method == "Параметрическое уравнение":
+            func = parametric.parellipse
+        elif method == "Алгоритм Брезенхема":
+            func = bresenham.bresellipse
+        elif method == "Алгоритм средней точки":
+            func = midpoint.midpellipse
+        elif method == "Библиотечная функция":
+            func = root.image.create_oval
 
-    for pair in dots:
-        if func == root.image.create_line:
-            func(pair[0], pair[1], pair[2], pair[3], fill=color_cu.hex)
-        else:
-            ds = func(pair[0], pair[1], pair[2], pair[3], color_cu)
-            util.draw_line(root.image, ds)
+        for _ in range(n):
+            if func == root.image.create_oval:
+                func(x_center - rs1,
+                     y_center - rs2,
+                     x_center + rs1,
+                     y_center + rs2,
+                     outline=color_cu.hex)
+            else:
+                dots = func(x_center, y_center, rs1, rs2, color_cu)
+                util.draw_line(root.image, dots)
+
+            rs1 += step
+            rs2 += step
 
 
 def compare_algos(canvas):
@@ -211,19 +247,20 @@ def compare_algos(canvas):
 
     plt.rcParams["toolbar"] = "None"
 
-    taken_time = util.get_time(canvas)
+    taken_time, radiuses = util.get_time(canvas)
 
-    objects = list(taken_time.keys())
-    performance = list(taken_time.values())
-
-    y_pos = np.arange(len(objects))
+    plt.title("Сравнение алгоритмов")
 
     mng = plt.get_current_fig_manager()
     mng.window.showMaximized()
 
-    plt.bar(y_pos, performance, align="center", alpha=0.5)
-    plt.xticks(y_pos, objects)
-    plt.ylabel("Затраченное время, единицы времени")
-    plt.title("Временная характеристика алгоритмов построения отрезков")
+    for method in taken_time:
+        plt.plot(radiuses, taken_time[method][0], label=method)
 
+    plt.legend()
+
+    plt.ylabel("Затраченное время, единицы времени")
+    plt.title("Временная характеристика алгоритмов построения окружностей")
+
+    plt.grid()
     plt.show()
