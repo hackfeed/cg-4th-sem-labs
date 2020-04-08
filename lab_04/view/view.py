@@ -213,31 +213,33 @@ def draw_spectre(root):
             else:
                 dots = func(x_center, y_center, radius, color_cu)
                 util.draw_line(root.image, dots)
-    else:
-        if method == "Каноническое уравнение":
-            func = canonical.canellipse
-        elif method == "Параметрическое уравнение":
-            func = parametric.parellipse
-        elif method == "Алгоритм Брезенхема":
-            func = bresenham.bresellipse
-        elif method == "Алгоритм средней точки":
-            func = midpoint.midpellipse
-        elif method == "Библиотечная функция":
-            func = root.image.create_oval
 
-        for _ in range(n):
-            if func == root.image.create_oval:
-                func(x_center - rs1,
-                     y_center - rs2,
-                     x_center + rs1,
-                     y_center + rs2,
-                     outline=color_cu.hex)
-            else:
-                dots = func(x_center, y_center, rs1, rs2, color_cu)
-                util.draw_line(root.image, dots)
+        return
 
-            rs1 += step
-            rs2 += step
+    if method == "Каноническое уравнение":
+        func = canonical.canellipse
+    elif method == "Параметрическое уравнение":
+        func = parametric.parellipse
+    elif method == "Алгоритм Брезенхема":
+        func = bresenham.bresellipse
+    elif method == "Алгоритм средней точки":
+        func = midpoint.midpellipse
+    elif method == "Библиотечная функция":
+        func = root.image.create_oval
+
+    for _ in range(n):
+        if func == root.image.create_oval:
+            func(x_center - rs1,
+                 y_center - rs2,
+                 x_center + rs1,
+                 y_center + rs2,
+                 outline=color_cu.hex)
+        else:
+            dots = func(x_center, y_center, rs1, rs2, color_cu)
+            util.draw_line(root.image, dots)
+
+        rs1 += step
+        rs2 += step
 
 
 def compare_algos(canvas):

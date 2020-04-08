@@ -12,7 +12,7 @@ class RootWindow(tk.Tk):
 
         img = tk.PhotoImage(file="assets/img/icon.png")
 
-        self.geometry("1920x1010+0+0")
+        self.geometry("1910x1000+0+0")
         self.minsize(1, 1)
         self.maxsize(1920, 1010)
         self.resizable(0, 0)
