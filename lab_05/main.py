@@ -1,11 +1,15 @@
 import tkinter as tk
-from view import view
+from tkinter import colorchooser
+from view import util
 
 
 class RootWindow(tk.Tk):
     """
         Representation of root program window.
     """
+
+    color = "#000000"
+    edges = [[]]
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -23,14 +27,18 @@ class RootWindow(tk.Tk):
             highlightcolor="black"
         )
 
-        self.image = tk.Canvas(self)
-        self.image.place(relx=0.307, rely=0.028, relheight=0.945, relwidth=0.677)
-        self.image.configure(
+        self.image = tk.PhotoImage(width=1290, height=954)
+        self.canvas = tk.Canvas(self)
+        self.canvas.place(relx=0.307, rely=0.028, relheight=0.945, relwidth=0.677)
+        self.canvas.configure(
             background="#ffffff",
             borderwidth="2",
             relief="ridge",
             selectbackground="#c4c4c4"
         )
+        self.canvas.create_image((645, 477), image=self.image, state="normal")
+        self.canvas.bind("<Button-1>", lambda event: self.pixclick(event))
+        self.canvas.bind("<Button-3>", lambda event: self.pixclose(event))
 
         # Mode selection section.
         self.modelb = tk.Label(self)
@@ -76,7 +84,7 @@ class RootWindow(tk.Tk):
             background="black",
             activebackground="black",
             font="-family {Consolas} -size 14",
-            command=lambda: view.get_color(ROOT)
+            command=lambda: self.get_color()
         )
 
         # New dot section.
@@ -110,7 +118,7 @@ class RootWindow(tk.Tk):
             background="#000080",
             font="-family {Consolas} -size 14",
             foreground="#ffffff",
-            text="X"
+            text="Y"
         )
 
         self.xsb = tk.Spinbox(self)
@@ -156,7 +164,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Добавить точку"
+            text="Добавить точку",
+            command=self.add_dot
         )
 
         self.fillbtn = tk.Button(self)
@@ -188,9 +197,62 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Очистить экран"
-            # command=lambda: view.reset(ROOT)
+            text="Очистить экран",
+            command=self.reset_img
         )
+
+    def reset_img(self):
+        self.image.put("#FFFFFF", to=(0, 0, 1290, 954))
+
+    def get_color(self):
+        _, hex_code = colorchooser.askcolor(
+            parent=self,
+            title="Выберите цвет для закрашивания",
+            initialcolor=self.color
+        )
+        self.colorpicker.configure(
+            background=hex_code,
+            activebackground=hex_code
+        )
+        self.color = hex_code
+
+    def pixclick(self, event):
+        self.edges[-1].extend([[event.x, event.y, self.color]])
+        if len(self.edges[-1]) > 1:
+            line = util.bresenham_int(
+                self.edges[-1][-2][0],
+                self.edges[-1][-2][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1],
+                self.color
+            )
+            util.draw_line(self.image, line)
+
+    def pixclose(self, event):
+        if len(self.edges[-1]) > 1:
+            line = util.bresenham_int(
+                self.edges[-1][0][0],
+                self.edges[-1][0][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1],
+                self.color
+            )
+            util.draw_line(self.image, line)
+            self.edges.append([])
+
+    def add_dot(self):
+        x = int(self.xsb.get())
+        y = int(self.ysb.get())
+        self.edges[-1].extend([[x, y, self.color]])
+        if len(self.edges[-1]) > 1:
+            line = util.bresenham_int(
+                self.edges[-1][-2][0],
+                self.edges[-1][-2][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1],
+                self.color
+            )
+            util.draw_line(self.image, line)
 
 
 if __name__ == "__main__":
