@@ -1,4 +1,5 @@
 import tkinter as tk
+from view import view
 
 
 class RootWindow(tk.Tk):
@@ -72,10 +73,10 @@ class RootWindow(tk.Tk):
         self.colorpicker = tk.Button(self)
         self.colorpicker.place(relx=0.031, rely=0.218, height=42, width=476)
         self.colorpicker.configure(
-            background="#d9d9d9",
-            foreground="black",
-            activebackground="#000080",
-            font="-family {Consolas} -size 14"
+            background="black",
+            activebackground="black",
+            font="-family {Consolas} -size 14",
+            command=lambda: view.get_color(ROOT)
         )
 
         # New dot section.
