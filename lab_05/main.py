@@ -245,15 +245,6 @@ class RootWindow(tk.Tk):
             else:
                 self.y_groups[y_end - 1].extend([[x_end, x_step, y_proj]])
 
-    def check_y_group(self, y, key):
-        if y in self.y_groups:
-            for edge in self.y_groups[y]:
-                self.active_edges.append(edge)
-                self.active_edges.sort(key=key)
-            return True
-
-        return False
-
     def pixclick(self, event):
         self.edges[-1].extend([[event.x, event.y, self.color]])
         if len(self.edges[-1]) > 1:
