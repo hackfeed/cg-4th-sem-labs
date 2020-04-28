@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import colorchooser
 from view import util
+from fill import fill
 
 
 class RootWindow(tk.Tk):
@@ -10,6 +11,10 @@ class RootWindow(tk.Tk):
 
     color = "#000000"
     edges = [[]]
+    active_edges = []
+    y_groups = dict()
+    y_max = 0
+    y_min = 1000
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -175,8 +180,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Выполнить закраску"
-            # command=lambda: view.reset(ROOT)
+            text="Выполнить закраску",
+            command=lambda: fill.fill(ROOT)
         )
 
         self.timebtn = tk.Button(self)
@@ -203,6 +208,11 @@ class RootWindow(tk.Tk):
 
     def reset_img(self):
         self.image.put("#FFFFFF", to=(0, 0, 1290, 954))
+        self.edges = [[]]
+        self.active_edges = []
+        self.y_groups = dict()
+        self.y_max = 0
+        self.y_min = 1000
 
     def get_color(self):
         _, hex_code = colorchooser.askcolor(
@@ -216,6 +226,34 @@ class RootWindow(tk.Tk):
         )
         self.color = hex_code
 
+    def update_y_group(self, x_start, y_start, x_end, y_end):
+        if y_start > y_end:
+            x_end, x_start = x_start, x_end
+            y_end, y_start = y_start, y_end
+
+        if y_end > self.y_max:
+            self.y_max = y_end
+
+        if y_start < self.y_min:
+            self.y_min = y_start
+
+        y_proj = y_end - y_start if y_end - y_start else 1
+        x_step = -(x_end - x_start) / y_proj
+        if y_proj != 1:
+            if y_end - 1 not in self.y_groups:
+                self.y_groups[y_end - 1] = [[x_end, x_step, y_proj]]
+            else:
+                self.y_groups[y_end - 1].extend([[x_end, x_step, y_proj]])
+
+    def check_y_group(self, y, key):
+        if y in self.y_groups:
+            for edge in self.y_groups[y]:
+                self.active_edges.append(edge)
+                self.active_edges.sort(key=key)
+            return True
+
+        return False
+
     def pixclick(self, event):
         self.edges[-1].extend([[event.x, event.y, self.color]])
         if len(self.edges[-1]) > 1:
@@ -227,6 +265,13 @@ class RootWindow(tk.Tk):
                 self.color
             )
             util.draw_line(self.image, line)
+            self.update_y_group(
+                self.edges[-1][-2][0],
+                self.edges[-1][-2][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1]
+            )
+        print(self.y_groups)
 
     def pixclose(self, event):
         if len(self.edges[-1]) > 1:
@@ -238,7 +283,14 @@ class RootWindow(tk.Tk):
                 self.color
             )
             util.draw_line(self.image, line)
+            self.update_y_group(
+                self.edges[-1][0][0],
+                self.edges[-1][0][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1]
+            )
             self.edges.append([])
+        print(self.y_groups)
 
     def add_dot(self):
         x = int(self.xsb.get())
@@ -253,6 +305,13 @@ class RootWindow(tk.Tk):
                 self.color
             )
             util.draw_line(self.image, line)
+            self.update_y_group(
+                self.edges[-1][-2][0],
+                self.edges[-1][-2][1],
+                self.edges[-1][-1][0],
+                self.edges[-1][-1][1]
+            )
+        print(self.y_groups)
 
 
 if __name__ == "__main__":
