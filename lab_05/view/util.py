@@ -3,6 +3,9 @@
 """
 
 import tkinter as tk
+from tkinter import messagebox
+from time import time
+from fill import fill
 
 
 def draw_line(img, line):
@@ -47,3 +50,12 @@ def bresenham_int(x_start, y_start, x_end, y_end, color):
         e += 2*dy
 
     return dots
+
+
+def measure_time(root):
+    start = time()
+    fill.fill(root)
+    root.reset_img()
+    end = time()
+    messagebox.showinfo("Временная характеристика",
+                        f"Время, затраченно на закраску: {(end - start) / 1000} сек.")

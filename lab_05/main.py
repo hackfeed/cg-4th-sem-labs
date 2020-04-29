@@ -68,8 +68,6 @@ class RootWindow(tk.Tk):
         )
         self.modelst.insert(tk.END, "Без задержки")
         self.modelst.insert(tk.END, "С задержкой")
-        # self.modelst.bind("<Button-1>", lambda event,
-        #                    listbox=self.shapelst: view.check_lb(event, ROOT))
 
         # Color selection section.
         self.colorlb = tk.Label(self)
@@ -191,8 +189,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Замерить время"
-            # command=lambda: view.reset(ROOT)
+            text="Замерить время",
+            command=lambda: util.measure_time(ROOT)
         )
 
         self.clrbtn = tk.Button(self)
@@ -240,10 +238,10 @@ class RootWindow(tk.Tk):
         y_proj = y_end - y_start if y_end - y_start else 1
         x_step = -(x_end - x_start) / y_proj
         if y_proj != 1:
-            if y_end - 1 not in self.y_groups:
-                self.y_groups[y_end - 1] = [[x_end, x_step, y_proj]]
+            if y_end not in self.y_groups:
+                self.y_groups[y_end] = [[x_end, x_step, y_proj]]
             else:
-                self.y_groups[y_end - 1].extend([[x_end, x_step, y_proj]])
+                self.y_groups[y_end].extend([[x_end, x_step, y_proj]])
 
     def pixclick(self, event):
         self.edges[-1].extend([[event.x, event.y, self.color]])
