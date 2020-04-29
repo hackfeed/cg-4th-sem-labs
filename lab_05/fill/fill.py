@@ -33,12 +33,11 @@ def fill(root):
         delay = False
     y_end = root.y_max
     y_start = root.y_min
-    print(y_start, y_end)
     while y_end > y_start:
         check_active_edges(root.active_edges)
         add_active_edges(root.y_groups, root.active_edges, y_end)
         if delay:
-            time.sleep(0.001)
+            time.sleep(0.07)
             root.canvas.update()
         draw_scanline(root, y_end)
         y_end -= 1
