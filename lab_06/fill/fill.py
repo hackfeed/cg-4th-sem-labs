@@ -23,30 +23,30 @@ def fill(root):
         while root.image.get(x, y) != color:
             root.image.put(root.color, (x, y))
             x += 1
-        rx = x - 1
+        rborder = x - 1
 
         x = point[0] - 1
         while root.image.get(x, y) != color:
             root.image.put(root.color, (x, y))
             x -= 1
-        lx = x + 1
+        lborder = x + 1
 
         sign = [1, -1]
 
         for i in sign:
-            x = lx
+            x = lborder
             y = point[1] + i
 
-            while x <= rx:
+            while x <= rborder:
                 is_exist = False
-                while root.image.get(x, y) != color and x <= rx:
+                while root.image.get(x, y) != color and x <= rborder:
                     is_exist = True
                     x += 1
                 if is_exist:
                     root.stack.extend([[x - 1, y]])
                     is_exist = False
                 xi = x
-                while root.image.get(x, y) != color and x <= rx:
+                while root.image.get(x, y) != color and x <= rborder:
                     x += 1
                 if x == xi:
                     x += 1
