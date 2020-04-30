@@ -32,6 +32,7 @@ class RootWindow(tk.Tk):
         )
 
         self.image = tk.PhotoImage(width=1290, height=954)
+        self.image.put("#FFFFFF", to=(0, 0, 1290, 954))
         self.canvas = tk.Canvas(self)
         self.canvas.place(relx=0.307, rely=0.028, relheight=0.945, relwidth=0.677)
         self.canvas.configure(

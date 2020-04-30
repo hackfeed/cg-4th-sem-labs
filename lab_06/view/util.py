@@ -57,4 +57,4 @@ def measure_time(root):
     fill.fill(root)
     end = time()
     messagebox.showinfo("Временная характеристика",
-                        f"Время, затраченно на закраску: {(end - start) / 1000} сек.")
+                        f"Время, затраченно на закраску: {end - start} сек.")
