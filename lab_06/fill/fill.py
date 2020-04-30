@@ -31,7 +31,9 @@ def fill(root):
             x -= 1
         lx = x + 1
 
-        for i in [1, -1]:
+        sign = [1, -1]
+
+        for i in sign:
             x = lx
             y = point[1] + i
 
@@ -44,7 +46,7 @@ def fill(root):
                     root.stack.extend([[x - 1, y]])
                     is_exist = False
                 xi = x
-                while root.image.get(x, y) != color and x < rx:
+                while root.image.get(x, y) != color and x <= rx:
                     x += 1
                 if x == xi:
                     x += 1
