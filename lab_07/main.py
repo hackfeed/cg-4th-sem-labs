@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import colorchooser
-from view import util
 
 
 class RootWindow(tk.Tk):
@@ -11,10 +10,10 @@ class RootWindow(tk.Tk):
     cut_color = "#FF0000"
     section_color = "#00FF00"
     res_color = "#0000FF"
-    edges = [[]]
-    stack = []
-    x_draw = 0
-    y_draw = 0
+    cut = [None, None, None, None]
+    top_left_cut = [None, None]
+    sections = []
+    last_dot = [None, None]
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -32,8 +31,6 @@ class RootWindow(tk.Tk):
             highlightcolor="black"
         )
 
-        self.image = tk.PhotoImage(width=1290, height=954)
-        self.image.put("#FFFFFF", to=(0, 0, 1290, 954))
         self.canvas = tk.Canvas(self)
         self.canvas.place(relx=0.307, rely=0.028, relheight=0.945, relwidth=0.677)
         self.canvas.configure(
@@ -42,10 +39,8 @@ class RootWindow(tk.Tk):
             relief="ridge",
             selectbackground="#c4c4c4"
         )
-        self.canvas.create_image((645, 477), image=self.image, state="normal")
         self.canvas.bind("<Button-1>", lambda event: self.pixclick(event))
-        self.canvas.bind("<Button-2>", lambda event: self.pixdraw(event))
-        self.canvas.bind("<Button-3>", lambda event: self.pixclose(event))
+        self.canvas.bind("<Button-3>", lambda event: self.cutclick(event))
 
         # Color selection section.
         self.cutcolorlb = tk.Label(self)
@@ -186,7 +181,7 @@ class RootWindow(tk.Tk):
             background="#000080",
             font="-family {Consolas} -size 14",
             foreground="#ffffff",
-            text="Xлв"
+            text="Xпн"
         )
 
         self.yldlb = tk.Label(self)
@@ -197,7 +192,7 @@ class RootWindow(tk.Tk):
             background="#000080",
             font="-family {Consolas} -size 14",
             foreground="#ffffff",
-            text="Yлв"
+            text="Yпн"
         )
 
         self.xldsb = tk.Spinbox(self)
@@ -244,7 +239,7 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Применить",
-            command=self.add_dot
+            command=self.add_cut
         )
 
         # New dot section.
@@ -347,14 +342,14 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Очистить экран",
-            command=self.reset_img
+            command=self.reset
         )
 
-    def reset_img(self):
-        self.image.put("#FFFFFF", to=(0, 0, 1290, 954))
-        self.edges = [[]]
-        self.x_draw = 0
-        self.y_draw = 0
+    def reset(self):
+        self.canvas.delete("all")
+        self.cut = [None, None, None, None]
+        self.sections = []
+        self.top_left_cut = [None, None]
 
     def get_color(self, cp, color):
         _, hex_code = colorchooser.askcolor(
@@ -368,49 +363,42 @@ class RootWindow(tk.Tk):
         )
         color = hex_code
 
+    def draw_line(self, dot_start, dot_end, color):
+        self.canvas.create_line(dot_start[0], dot_start[1], dot_end[0], dot_end[1], fill=color)
+
+    def draw_cut(self, top_left, bottom_right, color):
+        self.canvas.create_rectangle(top_left[0], top_left[1],
+                                     bottom_right[0], bottom_right[1], outline=color)
+
     def pixclick(self, event):
-        self.edges[-1].extend([[event.x, event.y, self.color]])
-        if len(self.edges[-1]) > 1:
-            line = util.bresenham_int(
-                self.edges[-1][-2][0],
-                self.edges[-1][-2][1],
-                self.edges[-1][-1][0],
-                self.edges[-1][-1][1],
-                self.color
-            )
-            util.draw_line(self.image, line)
+        if self.last_dot[0]:
+            self.sections.append([self.last_dot.copy(), [event.x, event.y]])
+            self.draw_line(self.sections[-1], self.sections[-1], self.section_color)
+            self.last_dot[0] = None
+        else:
+            self.last_dot[0], self.last_dot[1] = event.x, event.y
 
-    def pixclose(self, event):
-        if len(self.edges[-1]) > 1:
-            line = util.bresenham_int(
-                self.edges[-1][0][0],
-                self.edges[-1][0][1],
-                self.edges[-1][-1][0],
-                self.edges[-1][-1][1],
-                self.color
-            )
-            util.draw_line(self.image, line)
-            self.edges.append([])
-
-    def pixdraw(self, event):
-        self.x_draw = event.x
-        self.y_draw = event.y
-        self.stack.extend([[self.x_draw, self.y_draw]])
-        self.image.put(self.color, (self.x_draw, self.y_draw))
+    def cutclick(self, event):
+        if self.top_left_cut[0]:
+            self.cut = [self.top_left_cut[0], self.top_left_cut[1], event.x, event.y]
+            self.draw_cut([self.cut[0], self.cut[1]], [self.cut[2], self.cut[3]], self.cut_color)
+        else:
+            self.reset()
+            self.top_left_cut[0], self.top_left_cut[1] = event.x, event.y
 
     def add_dot(self):
-        x = int(self.xsb.get())
-        y = int(self.ysb.get())
-        self.edges[-1].extend([[x, y, self.color]])
-        if len(self.edges[-1]) > 1:
-            line = util.bresenham_int(
-                self.edges[-1][-2][0],
-                self.edges[-1][-2][1],
-                self.edges[-1][-1][0],
-                self.edges[-1][-1][1],
-                self.color
-            )
-            util.draw_line(self.image, line)
+        if self.last_dot[0]:
+            self.sections.append([self.last_dot.copy(), [int(self.xsb.get()), int(self.ysb.get())]])
+            self.draw_line(self.sections[-1], self.sections[-1], self.section_color)
+            self.last_dot[0] = None
+        else:
+            self.last_dot[0], self.last_dot[1] = int(self.xsb.get()), int(self.ysb.get())
+
+    def add_cut(self):
+        self.reset()
+        self.cut = [int(self.xulsb.get()), int(self.yulsb.get()),
+                    int(self.xldsb.get()), int(self.yldsb.get())]
+        self.draw_cut([self.cut[0], self.cut[1]], [self.cut[2], self.cut[3]], self.cut_color)
 
 
 if __name__ == "__main__":
