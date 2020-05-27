@@ -6,29 +6,29 @@ BOTTOM = 0b0100
 TOP = 0b1000
 
 
-def set_bits(dot, cut):
-    bits = 0b0000
+def set_code(dot, cut):
+    code = 0b0000
     if dot[0] < cut[0]:
-        bits += LEFT
+        code += LEFT
     if dot[1] < cut[1]:
-        bits += TOP
+        code += TOP
     if dot[0] > cut[2]:
-        bits += RIGHT
+        code += RIGHT
     if dot[1] > cut[3]:
-        bits += BOTTOM
+        code += BOTTOM
 
-    return bits
+    return code
 
 
 def get_distance(dot_start, dot_end):
     return sqrt((dot_start[0] - dot_end[0])**2 + (dot_start[1] - dot_end[1])**2)
 
 
-def midpoint(root, cut, dot_start, dot_end, eps):
+def midpointcut(root, cut, dot_start, dot_end, eps):
     i = 1
     while True:
-        code_start = set_bits(dot_start, cut)
-        code_end = set_bits(dot_end, cut)
+        code_start = set_code(dot_start, cut)
+        code_end = set_code(dot_end, cut)
 
         if code_start == 0 and code_end == 0:
             root.draw_line(dot_start, dot_end, root.res_color)
@@ -53,8 +53,8 @@ def midpoint(root, cut, dot_start, dot_end, eps):
             dot_tmp = dot_start
             dot_start = dot_middle
 
-            code_start = set_bits(dot_start, cut)
-            code_end = set_bits(dot_end, cut)
+            code_start = set_code(dot_start, cut)
+            code_end = set_code(dot_end, cut)
 
             if code_start & code_end:
                 dot_start = dot_tmp
@@ -66,4 +66,4 @@ def midpoint(root, cut, dot_start, dot_end, eps):
 
 def cut(root):
     for section in root.sections:
-        midpoint(root, root.cut, section[0], section[1], 1e-1)
+        midpointcut(root, root.cut, section[0], section[1], 1e-1)
