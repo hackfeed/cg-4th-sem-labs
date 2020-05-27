@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import colorchooser
+from cut import cut
 
 
 class RootWindow(tk.Tk):
@@ -58,7 +59,7 @@ class RootWindow(tk.Tk):
         self.cutcolorpicker.place(relx=0.031, rely=0.079, height=42, width=476)
         self.cutcolorpicker.configure(
             background=self.cut_color,
-            activebackground="black",
+            activebackground=self.cut_color,
             font="-family {Consolas} -size 14",
             command=lambda: self.get_color(self.cutcolorpicker, self.cut_color)
         )
@@ -78,7 +79,7 @@ class RootWindow(tk.Tk):
         self.sectioncolorpicker.place(relx=0.031, rely=0.168, height=42, width=476)
         self.sectioncolorpicker.configure(
             background=self.section_color,
-            activebackground="black",
+            activebackground=self.section_color,
             font="-family {Consolas} -size 14",
             command=lambda: self.get_color(self.sectioncolorpicker, self.section_color)
         )
@@ -98,7 +99,7 @@ class RootWindow(tk.Tk):
         self.rescolorpicker.place(relx=0.031, rely=0.258, height=43, width=476)
         self.rescolorpicker.configure(
             background=self.res_color,
-            activebackground="black",
+            activebackground=self.res_color,
             font="-family {Consolas} -size 14",
             command=lambda: self.get_color(self.rescolorpicker, self.res_color)
         )
@@ -330,8 +331,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Отсечь"
-            # command=lambda: fill.fill(ROOT)
+            text="Отсечь",
+            command=lambda: cut.cut(ROOT)
         )
 
         self.clrbtn = tk.Button(self)
