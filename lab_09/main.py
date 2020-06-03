@@ -13,7 +13,6 @@ class RootWindow(tk.Tk):
     res_color = "#0000FF"
     cut = []
     figure = []
-    sections = []
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -304,7 +303,6 @@ class RootWindow(tk.Tk):
         self.canvas.delete("all")
         self.cut = []
         self.figure = []
-        self.sections = []
 
     def get_color(self, cp, color):
         _, hex_code = colorchooser.askcolor(
@@ -319,7 +317,12 @@ class RootWindow(tk.Tk):
         color = hex_code
 
     def draw_line(self, dot_start, dot_end, color):
-        self.canvas.create_line(dot_start[0], dot_start[1], dot_end[0], dot_end[1], fill=color)
+        self.canvas.create_line(round(dot_start[0]), round(
+            dot_start[1]), round(dot_end[0]), round(dot_end[1]), fill=color)
+
+    def draw_figure(self, figure, color):
+        for section in figure:
+            self.draw_line(*section, color)
 
     def pixclick(self, event):
         self.figure.append([event.x, event.y])

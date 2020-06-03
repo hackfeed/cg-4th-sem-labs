@@ -62,43 +62,114 @@ def check_cut(cut):
     return True
 
 
-def cyrusbeck(root, cut, section, normals):
-    t_start = 0
-    t_end = 1
+def unique(sections):
+    for section in sections:
+        section.sort()
+    return list(filter(lambda section: (sections.count(section) % 2) == 1, sections))
 
+
+def is_in_section(point, section):
+    fvect = get_vect(point, section[0])
+    svect = get_vect(*section)
+
+    if abs(get_vect_mul(fvect, svect)) <= 1e-6:
+        if section[0] < point < section[1] or section[1] < point < section[0]:
+            return True
+
+    return False
+
+
+def get_sections(section, points):
+    new_points = [*section]
+    for point in points:
+        if is_in_section(point, section):
+            new_points.append(point)
+
+    new_points.sort()
+
+    sections = []
+    for i in range(len(new_points) - 1):
+        sections.append([new_points[i], new_points[i + 1]])
+
+    return sections
+
+
+def get_unique_sections(figure):
+    sections = []
+    points = figure[2:]
+    figlen = len(figure)
+    for i, _ in enumerate(figure):
+        section = [figure[i], figure[(i + 1) % figlen]]
+        sections.extend(get_sections(section, points))
+        points.pop(0)
+        points.append(figure[i])
+
+    return unique(sections)
+
+
+def check_vis(point, dot_start, dot_end):
+    fvect = get_vect(dot_start, dot_end)
+    svect = get_vect(dot_start, point)
+
+    if get_vect_mul(fvect, svect) >= 0:
+        return True
+
+    return False
+
+
+def get_intersection(section, edge, normal):
     vect = get_vect(section[0], section[1])
-    cutlen = len(cut)
+    w_vect = get_vect(edge[0], section[0])
 
-    for i in range(cutlen):
-        w_vect = get_vect(cut[(i + 1) % cutlen], section[0])
-        if cut[i] != section[0]:
-            w_vect = get_vect(cut[i], section[0])
+    vect_scal = get_scalar_mul(vect, normal)
+    w_wect_scal = get_scalar_mul(w_vect, normal)
 
-        vect_scal = get_scalar_mul(vect, normals[i])
-        w_vect_scal = get_scalar_mul(w_vect, normals[i])
+    diff = [section[1][0] - section[0][0], section[1][1] - section[0][1]]
+    t = -w_wect_scal / vect_scal
 
-        if vect_scal == 0:
-            if w_vect_scal < 0:
-                return
-            continue
+    return [section[0][0] + diff[0] * t, section[0][1] + diff[1] * t]
 
-        t = -w_vect_scal / vect_scal
-        if vect_scal > 0:
-            if t > t_start:
-                t_start = t
+
+def get_cut(figure, edge, normal):
+    res_figure = []
+    figlen = len(figure)
+
+    if figlen < 3:
+        return []
+
+    pcheck = check_vis(figure[0], *edge)
+
+    for i in range(1, figlen + 1):
+        ccheck = check_vis(figure[i % figlen], *edge)
+
+        if pcheck:
+            if ccheck:
+                res_figure.append(figure[i % figlen])
+            else:
+                res_figure.append(get_intersection(
+                    [figure[i - 1], figure[i % figlen]], edge, normal))
+
         else:
-            if t < t_end:
-                t_end = t
+            if ccheck:
+                res_figure.append(get_intersection(
+                    [figure[i - 1], figure[i % figlen]], edge, normal))
+                res_figure.append(figure[i % figlen])
 
-        if t_start > t_end:
-            break
+        pcheck = ccheck
 
-    if t_start < t_end:
-        dot_start = [round(section[0][0] + vect[0] * t_start),
-                     round(section[0][1] + vect[1] * t_start)]
-        dot_end = [round(section[0][0] + vect[0] * t_end),
-                   round(section[0][1] + vect[1] * t_end)]
-        root.draw_line(dot_start, dot_end, root.res_color)
+    return res_figure
+
+
+def sutherlandhodgman(figure, cut, normals):
+    res_figure = figure
+    for i, _ in enumerate(cut):
+        edge = [cut[i], cut[(i + 1) % len(cut)]]
+        print(f"Сторона - {edge}, нормаль - {normals[i]}")
+        res_figure = get_cut(res_figure, edge, normals[i])
+        if len(res_figure) < 3:
+            return []
+
+    return res_figure
 
 
 def cut(root):
@@ -106,6 +177,5 @@ def cut(root):
         return
 
     normals = get_normals(root.cut)
-    print(normals)
-    for section in root.sections:
-        cyrusbeck(root, root.cut, section, normals)
+    figure = sutherlandhodgman(root.figure, root.cut, normals)
+    root.draw_figure(get_unique_sections(figure), root.res_color)
