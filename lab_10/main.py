@@ -9,6 +9,21 @@ class RootWindow(tk.Tk):
     """
 
     color = "#FF0000"
+    scale = 0
+    x_from = 0
+    x_to = 0
+    x_step = 0
+    z_from = 0
+    z_to = 0
+    z_step = 0
+    mat = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ]
+    canv_width = 1290
+    canv_height = 954
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -77,6 +92,9 @@ class RootWindow(tk.Tk):
             selectforeground="white",
             font="-family {Consolas} -size 14"
         )
+        self.funclst.insert(tk.END, "func1")
+        self.funclst.insert(tk.END, "func2")
+        self.funclst.insert(tk.END, "func3")
 
         # Limits section.
         self.limitslb = tk.Label(self)
@@ -260,8 +278,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Применить"
-            # command=self.add_cut
+            text="Применить",
+            command=lambda: self.get_meta()
         )
 
         # Rotate section.
@@ -370,8 +388,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Вращать"
-            # command=self.add_dot
+            text="Вращать",
+            command=lambda: fhorizon.xrotate(ROOT)
         )
 
         self.yrotatebtn = tk.Button(self)
@@ -381,8 +399,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Вращать"
-            # command=self.add_dot
+            text="Вращать",
+            command=lambda: fhorizon.yrotate(ROOT)
         )
 
         self.zrotatebtn = tk.Button(self)
@@ -392,8 +410,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Вращать"
-            # command=self.add_dot
+            text="Вращать",
+            command=lambda: fhorizon.zrotate(ROOT)
         )
 
         # Scale section.
@@ -444,8 +462,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Применить"
-            # command=lambda: cut.cut(ROOT)
+            text="Применить",
+            command=lambda: self.get_scale()
         )
 
         # General section.
@@ -456,8 +474,8 @@ class RootWindow(tk.Tk):
             foreground="black",
             activebackground="#000080",
             font="-family {Consolas} -size 14",
-            text="Нарисовать"
-            # command=lambda: cut.cut(ROOT)
+            text="Нарисовать",
+            command=lambda: fhorizon.fhorizon(ROOT)
         )
 
         self.clrbtn = tk.Button(self)
@@ -468,7 +486,7 @@ class RootWindow(tk.Tk):
             activebackground="#000080",
             font="-family {Consolas} -size 14",
             text="Очистить экран",
-            command=self.reset
+            command=lambda: self.reset()
         )
 
     def reset(self):
@@ -486,9 +504,39 @@ class RootWindow(tk.Tk):
         )
         color = hex_code
 
+    def get_scale(self):
+        self.scale = float(self.kscalesb.get())
+
+    def get_meta(self):
+        self.x_from = float(self.xfromsb.get())
+        self.x_to = float(self.xtosb.get())
+        self.x_step = float(self.xstepsb.get())
+        self.z_from = float(self.zfromsb.get())
+        self.z_to = float(self.ztosb.get())
+        self.z_step = float(self.zstepsb.get())
+
+    def draw_pixel(self, x, y, color):
+        self.canvas.create_line(x, y, x + 1, y + 1, fill=color)
+
+    def is_visible(self, dot):
+        return 0 <= dot[0] < self.canv_width and 0 <= dot[1] < self.canv_height
+
+    def draw_dot(self, x, y, uphor, lowhor):
+        if not self.is_visible([x, y]):
+            return False
+
+        if y > uphor[x]:
+            uphor[x] = y
+            self.draw_pixel(x, y, self.color)
+
+        elif y < lowhor[x]:
+            lowhor[x] = y
+            self.draw_pixel(x, y, self.color)
+
+        return True
+
     def draw_line(self, dot_start, dot_end, color):
-        self.canvas.create_line(round(dot_start[0]), round(
-            dot_start[1]), round(dot_end[0]), round(dot_end[1]), fill=color)
+        self.canvas.create_line(dot_start[0], dot_start[1], dot_end[0], dot_end[1], fill=color)
 
 
 if __name__ == "__main__":
