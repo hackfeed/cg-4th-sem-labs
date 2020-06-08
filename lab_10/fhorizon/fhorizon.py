@@ -38,28 +38,34 @@ def trans_dot(root, dot):
 
 def xrotate(root):
     val = float(root.xrotatesb.get()) / 180 * pi
-    mat = [[1, 0, 0, 0],
-           [0, cos(val), sin(val), 0],
-           [0, -sin(val), cos(val), 0],
-           [0, 0, 0, 1]]
+    mat = [
+        [1, 0, 0, 0],
+        [0, cos(val), sin(val), 0],
+        [0, -sin(val), cos(val), 0],
+        [0, 0, 0, 1]
+    ]
     rotate_mat(root, mat)
 
 
 def yrotate(root):
     val = float(root.yrotatesb.get()) / 180 * pi
-    mat = [[cos(val), 0, -sin(val), 0],
-           [0, 1, 0, 0],
-           [sin(val), 0, cos(val), 0],
-           [0, 0, 0, 1]]
+    mat = [
+        [cos(val), 0, -sin(val), 0],
+        [0, 1, 0, 0],
+        [sin(val), 0, cos(val), 0],
+        [0, 0, 0, 1]
+    ]
     rotate_mat(root, mat)
 
 
 def zrotate(root):
     val = float(root.yrotatesb.get()) / 180 * pi
-    mat = [[cos(val), sin(val), 0, 0],
-           [-sin(val), cos(val), 0, 0],
-           [0, 0, 1, 0],
-           [0, 0, 0, 1]]
+    mat = [
+        [cos(val), sin(val), 0, 0],
+        [-sin(val), cos(val), 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ]
     rotate_mat(root, mat)
 
 
@@ -79,10 +85,12 @@ def predraw_horizon(root, fdot, sdot, uphor, lowhor):
     dx /= l
     dy /= l
 
-    x, y = fdot[0], fdot[1]
+    x = fdot[0]
+    y = fdot[1]
 
     for _ in range(int(l) + 1):
-        if not root.draw_dot(int(round(x)), y, uphor, lowhor):
+        x = int(round(x))
+        if not root.draw_dot(x, y, uphor, lowhor):
             return
 
         x += dx
@@ -105,6 +113,7 @@ def fhorizon(root):
 
     func_ind = root.funclst.curselection()[0]
     func = funcs.funcs[root.funclst.get(func_ind)]
+
     uphor = [0 for _ in range(root.canv_width)]
     lowhor = [root.canv_height for _ in range(root.canv_width)]
 
