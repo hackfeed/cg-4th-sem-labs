@@ -1,7 +1,7 @@
-from math import sin, cos, pi
+from math import sin, cos, sqrt
 
 funcs = {
-    "func1": lambda x, z: sin(x) * sin(z),
-    "func2": lambda x, z: sin(cos(x) * sin(z)),
-    "func3": lambda x, z: cos(x) * z / 3
+    "sin^2(x) + cos^2(z) - y = 0": lambda x, z: sin(x)**2 + cos(z)**2,
+    "sqrt(|sin(cos(x))|) + z / 2 - y = 0": lambda x, z: sqrt(abs(sin(cos(x)))) + z / 2,
+    "sin(x) - cos(x) + x*z - y = 0": lambda x, z: sin(x) - cos(z) + x*z
 }

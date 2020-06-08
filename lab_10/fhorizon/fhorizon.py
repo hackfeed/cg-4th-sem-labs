@@ -108,7 +108,7 @@ def fhorizon(root):
     uphor = [0 for _ in range(root.canv_width)]
     lowhor = [root.canv_height for _ in range(root.canv_width)]
 
-    for z in arange(root.z_from, root.z_to + root.z_step):
+    for z in arange(root.z_from, root.z_to + root.z_step, root.z_step):
         draw_horizon(root, func, uphor, lowhor, root.x_from, root.x_to, root.x_step, z)
 
     for z in arange(root.z_from, root.z_to, root.z_step):

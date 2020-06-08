@@ -92,9 +92,9 @@ class RootWindow(tk.Tk):
             selectforeground="white",
             font="-family {Consolas} -size 14"
         )
-        self.funclst.insert(tk.END, "func1")
-        self.funclst.insert(tk.END, "func2")
-        self.funclst.insert(tk.END, "func3")
+        self.funclst.insert(tk.END, "sin^2(x) + cos^2(z) - y = 0")
+        self.funclst.insert(tk.END, "sqrt(|sin(cos(x))|) + z / 2 - y = 0")
+        self.funclst.insert(tk.END, "sin(x) - cos(x) + x*z - y = 0")
 
         # Limits section.
         self.limitslb = tk.Label(self)
