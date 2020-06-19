@@ -6,8 +6,8 @@
 Огромное спасибо вот этим ребятам, которые всячески помогали при написании/защите лабораторных работ! 
 Бесконечная вам любовь <3
 
-* @Justarone
-* @mRRvz
-* @TheSawIsTheLaw
-* @SpectralOne
-* @teopalmer
+* [@Justarone](https://github.com/justarone)
+* [@mRRvz](https://github.com/mrrvz)
+* [@TheSawIsTheLaw](https://github.com/thesawisthelaw)
+* [@SpectralOne](https://github.com/spectralone)
+* [@teopalmer](https://github.com/teopalmer)
